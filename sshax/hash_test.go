@@ -1,9 +1,9 @@
 package sshax_test
 
 import (
-	"testing"
 	"crypto/md5"
 	"crypto/sha1"
+	"testing"
 
 	"github.com/yinyin/go-ssha/sshax"
 )
