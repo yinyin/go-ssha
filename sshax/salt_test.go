@@ -1,15 +1,15 @@
-package sshax_test
+package sshax
 
 import (
 	"bytes"
 	"testing"
 
-	sshax "github.com/yinyin/go-ssha"
+	"github.com/yinyin/go-ssha/sshax"
 )
 
 func TestMakeSaltedBuffer_UseDefault(t *testing.T) {
 	d := ([]byte)("this-is-a-test")
-	buffer, salt, err := sshax.MakeSaltedBuffer(d, 0)
+	buffer, salt, err := sshax.makeSaltedBuffer(d, 0)
 	if nil != err {
 		t.Errorf("MakeSaltedBuffer failed: %v", err)
 	}

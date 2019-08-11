@@ -10,9 +10,9 @@ const MinSaltLen int = 4
 // than MinSaltLen is passed into GenerateFromPassword.
 const DefaultSaltLen int = 8
 
-// MakeSaltedBuffer create and return byte slice with given password and salt
+// makeSaltedBuffer create and return byte slice with given password and salt
 // bytes in created buffer.
-func MakeSaltedBuffer(password []byte, saltLength int) (buffer, salt []byte, err error) {
+func makeSaltedBuffer(password []byte, saltLength int) (buffer, salt []byte, err error) {
 	if saltLength < MinSaltLen {
 		saltLength = DefaultSaltLen
 	}
