@@ -1,6 +1,9 @@
 package sshax
 
-import "crypto/rand"
+import (
+	"crypto/rand"
+	"hash"
+)
 
 // MinSaltLen is the minimum acceptable salt length as passed in to
 // GenerateFromPassword.
@@ -26,4 +29,24 @@ func makeSaltedBuffer(password []byte, saltLength int) (buffer, salt []byte, err
 	}
 	buffer = append(buffer, salt...)
 	return
+}
+
+func makeSalt(saltLength int) (salt []byte, err error) {
+	if saltLength < MinSaltLen {
+		saltLength = DefaultSaltLen
+	}
+	salt = make([]byte, saltLength)
+	if _, err = rand.Read(salt); nil != err {
+		return nil, err
+	}
+	return
+}
+
+func saltedHash(hasher hash.Hash, password, salt []byte) []byte {
+	var buffer []byte
+	buffer = make([]byte, 0, len(password)+len(salt))
+	buffer = append(buffer, password...)
+	buffer = append(buffer, salt...)
+	hasher.Write(buffer)
+	return hasher.Sum(nil)
 }

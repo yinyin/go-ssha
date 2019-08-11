@@ -2,24 +2,28 @@ package sshax
 
 import (
 	"bytes"
+	"crypto/md5"
 	"testing"
-
-	"github.com/yinyin/go-ssha/sshax"
 )
 
-func TestMakeSaltedBuffer_UseDefault(t *testing.T) {
-	d := ([]byte)("this-is-a-test")
-	buffer, salt, err := sshax.makeSaltedBuffer(d, 0)
+func TestMakeSalted_UseDefault(t *testing.T) {
+	salt, err := makeSalt(0)
 	if nil != err {
-		t.Errorf("MakeSaltedBuffer failed: %v", err)
+		t.Errorf("MakeSalt failed: %v", err)
 	}
-	if len(salt) != sshax.DefaultSaltLen {
-		t.Errorf("salt length (%d) != default (%d)", len(salt), sshax.DefaultSaltLen)
+	if len(salt) != DefaultSaltLen {
+		t.Errorf("salt length (%d) != default (%d)", len(salt), DefaultSaltLen)
 	}
-	if (len(d) > len(buffer)) || (0 != bytes.Compare(buffer[:len(d)], d)) {
-		t.Errorf("given password not prefixed: %v != %v", buffer, d)
-	}
-	if 0 != bytes.Compare(buffer[len(d):], salt) {
-		t.Errorf("salt not suffixed: %v != %v", buffer[len(d):], salt)
+}
+
+func TestSaltedHash_MD5(t *testing.T) {
+	hasher := md5.New()
+	password := ([]byte)("p-a-s-s-w-o-r-d")
+	salt := ([]byte)(".s.a.l.t.")
+	combined := ([]byte)("p-a-s-s-w-o-r-d.s.a.l.t.")
+	h := saltedHash(hasher, password, salt)
+	c := md5.Sum(combined)
+	if 0 != bytes.Compare(h, c[:]) {
+		t.Errorf("hash mismatch: %v, %v", h, c)
 	}
 }
