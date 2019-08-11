@@ -42,7 +42,7 @@ func unpackHash(hashedPassword []byte, digestLen int) ([]byte, error) {
 	if unpackedHashLen < digestLen {
 		return nil, ErrHashTooShort
 	}
-	return unpackedHash, nil
+	return unpackedHash[:unpackedHashLen], nil
 }
 
 // CompareHashAndPassword compares a hashed password with its possible
